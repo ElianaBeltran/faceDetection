@@ -13,16 +13,26 @@
 // limitations under the License.
 
 import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
+import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+import { GLTFLoader } from "https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/loaders/GLTFLoader.js";
 const { FaceLandmarker, FilesetResolver, DrawingUtils } = vision;
 const demosSection = document.getElementById("demos");
 const imageBlendShapes = document.getElementById("image-blend-shapes");
 const videoBlendShapes = document.getElementById("video-blend-shapes");
+const image = document.createElement("img");
+image.src = "Resources/b.jpg";
 
 let faceLandmarker;
 let runningMode: "IMAGE" | "VIDEO" = "IMAGE";
 let enableWebcamButton: HTMLButtonElement;
 let webcamRunning: Boolean = false;
 const videoWidth = 480;
+
+function init() {
+
+}
+
+init();
 
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
@@ -197,6 +207,7 @@ function enableCam(event) {
   });
 }
 
+
 let lastVideoTime = -1;
 let results = undefined;
 const drawingUtils = new DrawingUtils(canvasCtx);
@@ -268,6 +279,12 @@ async function predictWebcam() {
     }
   }
   drawBlendShapes(videoBlendShapes, results.faceBlendshapes);
+  /*if (results.faceLandmarks){
+
+    image.x = results.faceLandmarks[9].x;
+    image.y = results.faceLandmarks[9].y;
+        //FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE;
+  }*/
 
   // Call this function again to keep predicting when the browser is ready.
   if (webcamRunning === true) {
@@ -280,8 +297,9 @@ function drawBlendShapes(el: HTMLElement, blendShapes: any[]) {
     return;
   }
 
+
   console.log(blendShapes[0]);
-  
+
   let htmlMaker = "";
   blendShapes[0].categories.map((shape) => {
     htmlMaker += `
